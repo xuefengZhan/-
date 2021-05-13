@@ -1,4 +1,4 @@
-public class _01_ {
+public class _00_ {
     public static void test(int n, int k){
         for(int i = 0; i < n; i++){
             System.out.println("test");
