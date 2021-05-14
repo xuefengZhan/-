@@ -78,11 +78,17 @@ public class LinkedList<E> extends AbstractList<E>{
         if(first == null) throw new RuntimeException("empty list");
         Node<E> current = first;
         for (int i = 0; i < size; i++) {
-            if((element == null && element == current.element) || current.element.equals(element)){
+            if((element == null && element == current.element) || (element != null && element.equals(current.element))){
+                //必须是element.equals(current.element)   反过来不行
+                //因为element做了 ！= null 判断，短路与
+                //如果反过来，element=3的情况下，会遍历到current.element = null的时候，因为在3前面
+                //这个时候就会报空指针异常了
                 return i;
             }else{
                 current = current.next;
             }
+
+
         }
         return ELEMENT_NOT_FOUND;
     }
