@@ -1,6 +1,9 @@
 package _01_线性表;
 
 public interface List<E> {
+
+    public static final int ELEMENT_NOT_FOUND = -1;
+
     int size(); // 元素的数量
     boolean isEmpty(); // 是否为空
     boolean contains (E element); // 是否包含某个元素

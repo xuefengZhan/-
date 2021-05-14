@@ -1,53 +1,22 @@
 package _01_线性表;
 
-public class ArrayList_v1<E> implements List<E> {
+public class ArrayList<E> extends AbstractList<E>{
 
-    private int size;
+
     private E[] elements;
     //默认的数组容量大小
     private static final int DEFAULT_CAPACITY = 10;
-    //-1下标：代表没有这个元素
-    private static final int ELEMENT_NOT_FOUND = -1;
 
-    public ArrayList_v1() {
 
-        this(DEFAULT_CAPACITY);
+    public ArrayList() {
     }
 
-    public ArrayList_v1(int capacity) {
+    public ArrayList(int capacity) {
         capacity = (capacity < DEFAULT_CAPACITY) ? DEFAULT_CAPACITY : capacity;
         elements = (E[])new Object[capacity];
     }
 
-    private void rangeCheck(int index){
-        if(index >= size || index < 0){}
-            throw new RuntimeException("Index Out of Range");
-    }
-    private void rangeCheckForAdd(int index){
-        if(index > size || index < 0){}
-            throw new RuntimeException("Index Out of Range For Add");
-    }
 
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size==0;
-    }
-
-    @Override
-    public boolean contains(E element) {
-        return indexOf(element) == ELEMENT_NOT_FOUND;
-    }
-
-    @Override
-    public void add(E element) {
-        add(size,element);
-    }
 
     @Override
     public E get(int index) {
@@ -57,9 +26,7 @@ public class ArrayList_v1<E> implements List<E> {
 
     @Override
     public E set(int index, E element) {
-        if(index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index:" + index + ", Size:" + size);
-        }
+        rangeCheck(index);
         E old = elements[index];
         elements[index] = element;
         return old;
@@ -112,6 +79,10 @@ public class ArrayList_v1<E> implements List<E> {
                     return i;
                 }
             }
+        }else{
+                for (int i = 0; i < size; i++) {
+                    if(elements[i].equals(element)) return i;
+                }
         }
         return ELEMENT_NOT_FOUND;
     }
@@ -123,5 +94,16 @@ public class ArrayList_v1<E> implements List<E> {
             elements[i] = null;
         }
         size=0;
+    }
+
+
+
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < size; i++) {
+            sb.append(elements[i]).append(" ");
+        }
+        return sb.toString();
     }
 }
