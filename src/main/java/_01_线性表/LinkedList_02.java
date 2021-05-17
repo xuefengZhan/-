@@ -1,8 +1,15 @@
 package _01_线性表;
 
-public class LinkedList<E> extends AbstractList<E>{
 
-    private Node<E> first;
+/*
+    todo 带有虚拟头结点
+     在增删的时候，需要考虑index==0的特殊情况，需要特殊处理
+     虚拟头结点的目的是让头结点的处理和普通节点一样
+     具体做法就是first指向一个不存值得节点，first.next为index==0的节点
+ */
+public class LinkedList_02<E> extends AbstractList<E>{
+
+    private Node<E> first = new Node<E>(null);
 
 
     private class Node<E>{
@@ -22,7 +29,9 @@ public class LinkedList<E> extends AbstractList<E>{
 
     private Node<E> node(int index){
         rangeCheck(index);
-        Node<E> current = first;
+        //todo 改动1：
+        //Node<E> current = first;
+        Node<E> current = first.next;
         for(int i = 0;i < index;i++){
             current = current.next;
         }
@@ -45,12 +54,16 @@ public class LinkedList<E> extends AbstractList<E>{
     @Override
     public void add(int index, E element) {
         rangeCheckForAdd(index);
-        if(index == 0){
-            first = new Node(element,first);
-        }else{
-            Node<E> prev = node(index - 1);
-            prev.next = new Node(element,prev.next);
-        }
+        //todo : 改动2
+//        if(index == 0){
+//            first = new Node(element,first);
+//        }else{
+//            Node<E> prev = node(index - 1);
+//            prev.next = new Node(element,prev.next);
+//        }
+        Node<E> prev = index == 0 ? first : node(index  - 1);
+        prev.next = new Node<E>(element,prev.next);
+
         size++;
 
     }
@@ -58,15 +71,19 @@ public class LinkedList<E> extends AbstractList<E>{
     @Override
     public E remove(int index) {
         rangeCheck(index);
-        E oldElement = null;
-        if(index == 0){
-            oldElement = first.element;
-            first = first.next;
-        }else{
-            Node<E> prev  = node(index - 1);
-            oldElement = prev.next.element;
-            prev.next = prev.next.next;
-        }
+        //todo 改动
+//        if(index == 0){
+//            oldElement = first.element;
+//            first = first.next;
+//        }else{
+//            Node<E> prev  = node(index - 1);
+//            oldElement = prev.next.element;
+//            prev.next = prev.next.next;
+//        }
+        Node<E> prev = index == 0 ? first : node(index  - 1);
+        E oldElement = prev.next.element;
+        prev.next = prev.next.next;
+
         size--;
         return oldElement;
     }
@@ -74,13 +91,9 @@ public class LinkedList<E> extends AbstractList<E>{
     @Override
     public int indexOf(E element) {
         if(first == null) throw new RuntimeException("empty list");
-        Node<E> current = first;
+        Node<E> current = first.next;
         for (int i = 0; i < size; i++) {
             if((element == null && element == current.element) || (element != null && element.equals(current.element))){
-                //必须是element.equals(current.element)   反过来不行
-                //因为element做了 ！= null 判断，短路与
-                //如果反过来，element=3的情况下，会遍历到current.element = null的时候，因为在3前面
-                //这个时候就会报空指针异常了
                 return i;
             }else{
                 current = current.next;
@@ -93,13 +106,15 @@ public class LinkedList<E> extends AbstractList<E>{
 
     @Override
     public void clear() {
-        first = null;
+        //todo 改动
+        first.next = null;
         size = 0;
     }
 
     @Override
     public String toString() {
-        Node<E> node = first;
+        if(first == null) return "empty list";
+        Node<E> node = first.next;
         StringBuilder sb = new StringBuilder();
 
         while(node != null){
