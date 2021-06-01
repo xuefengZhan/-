@@ -1,0 +1,154 @@
+package _02_二叉树;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
+    private Comparator<E> comparator;
+
+    public _02_BinarySearchTree(){}
+
+    public _02_BinarySearchTree(Comparator<E> comparator){
+        this.comparator = comparator;
+    }
+
+    private int Compare(E e1,E e2){
+        if(comparator == null){
+            return ((Comparable)e1).compareTo(e2);
+        }else{
+            return comparator.compare(e1,e2);
+        }
+    }
+
+    private void elementNotNullCheck(E element){
+        if(element == null){
+            throw new IllegalArgumentException("element can not be null");
+        }
+    }
+
+    //todo 提供一个add后的操作，普通BST中不做任何实现
+    //这个node是插入的新节点
+    protected void afterAdd(Node<E> node){
+
+    }
+
+    protected Node<E> createNode(E element,Node<E> parent){
+        return new Node(element,parent);
+    }
+
+    public void add(E element){
+        elementNotNullCheck(element);
+        if(root == null){
+            //root = new Node(element,null);
+            root = createNode(element,null);
+            size++;
+            afterAdd(root);
+            return;
+        }
+        //1.新节点插到哪个节点下面？
+        //2.新节点插到该节点的左边还是右边？
+        Node<E> node = root;
+        Node<E> parent = null;
+        int cmp = 0;
+        while(node!=null){
+            parent = node;
+            cmp = Compare(node.element,element);
+            if(cmp > 0){
+                node = node.left;
+            }else if(cmp < 0){
+                node = node.right;
+            }else{
+                return;
+            }
+        }
+        //Node<E> newNode = new Node(element,parent);
+        Node<E> newNode = createNode(element,parent);
+        if(cmp>0){
+            parent.left = newNode;
+        }else{
+            parent.right = newNode;
+        }
+        size++;
+        afterAdd(newNode);
+    }
+
+
+    //根据值找到节点
+    private Node<E> node(E element){
+        elementNotNullCheck(element);
+        Node<E> node = root;
+        while(node!= null){
+            int cmp = Compare(element,node.element);
+
+            if(cmp > 0){
+                node = node.right;
+            }else if(cmp<0){
+                node = node.left;
+            }else{
+                return node;
+            }
+        }
+        //node == null 或者 node的值和element相同
+        return null;
+    }
+
+    private void remove(Node<E> node){
+        if(node == null) return;
+        //先处理度为2的节点，因为也是删除度为1的节点
+        // 找到要被删除的节点
+        Node<E> del = null;
+        if(node.left != null && node.right != null){
+            del = predesessor(node);//前继节点
+            node.element = del.element;
+        }else{
+            del = node;
+        }
+
+
+        Node<E> child = del.left == null ? del.right:del.left;
+
+//        if(child != null){//度为1的节点
+//            if(del.parent == null){
+//                root = child;
+//            }
+//        }else{//度为0的 叶子结点
+//            if(del.parent == null){
+//                root = null;
+//            }else{
+//                if(del == del.parent.left){
+//                    del.parent.left = null;
+//                }else{
+//                    del.parent.right = null;
+//                }
+//            }
+//        }
+        if(child != null){
+            child.parent = del.parent;
+        }
+        if(del.parent == null){
+            root = child;
+        }else{
+            if(del == del.parent.left){
+                del.parent.left = child;
+            }else{
+                del.parent.right = child;
+            }
+        }
+        size--;
+    }
+
+    public void remove(E element){
+        remove(node(element));
+    }
+
+    public boolean contains(E element){
+        return node(element) == null;
+    }
+
+}
+
+
