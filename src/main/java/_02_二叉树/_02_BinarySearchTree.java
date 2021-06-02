@@ -36,6 +36,10 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
 
     }
 
+    protected void afterRemove(Node<E> node){
+
+    }
+
     protected Node<E> createNode(E element,Node<E> parent){
         return new Node(element,parent);
     }
@@ -111,22 +115,8 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
 
         Node<E> child = del.left == null ? del.right:del.left;
 
-//        if(child != null){//度为1的节点
-//            if(del.parent == null){
-//                root = child;
-//            }
-//        }else{//度为0的 叶子结点
-//            if(del.parent == null){
-//                root = null;
-//            }else{
-//                if(del == del.parent.left){
-//                    del.parent.left = null;
-//                }else{
-//                    del.parent.right = null;
-//                }
-//            }
-//        }
-        if(child != null){
+
+        if(child != null){  //del是度为1 的节点  需要做这一步
             child.parent = del.parent;
         }
         if(del.parent == null){
@@ -138,6 +128,9 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
                 del.parent.right = child;
             }
         }
+
+        //节点真正被删除的时候删除
+        afterRemove(del);
         size--;
     }
 

@@ -198,4 +198,22 @@ public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
            }
        }
     }
+
+    //todo 删除节点可能会引发多个祖父节点失衡，因此对比 afterAdd()
+    // afterAdd只需要修复最低的失衡节点即可，因此只需要去掉break即可。
+    // 需要注意的是：在删除节点的过程中，我们并没有修改del节点的parent，
+    // 因此node=node.parent是一直有效的。
+    protected void afterRemove(Node<E> node) {
+        //沿着parent一直往上找到第一个失衡的父节点
+        while((node=node.parent)!= null){
+            //新节点的父节点肯定是平衡的，因此从这往上一直更新到
+            //失衡祖宗节点的高度
+            if(isBalanced(node)){
+                updateHeight(node);
+            }else{
+                //这是第一个不平衡的节点
+                rebalance(node);
+            }
+        }
+    }
 }
