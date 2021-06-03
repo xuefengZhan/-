@@ -35,9 +35,14 @@ public class _01_BinaryTree<E> {
         public boolean isRightChild(){ // 判断自己是不是右子树
             return parent!=null && this==parent.right;
         }
-        /*
-         * 返回兄弟节点
+
+        /**
+         *  RBTree添加的方法：
+         *   sibling()
+         *
          */
+
+        //返回兄弟节点
         public Node<E> sibling() { // 红黑树中用到, 返回兄弟节点
             if (isLeftChild()) {
                 return parent.right;
