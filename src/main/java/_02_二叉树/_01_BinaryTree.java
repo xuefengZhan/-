@@ -1,9 +1,11 @@
 package _02_二叉树;
 
+import BinaryTreePrinter.src.com.mj.printer.BinaryTreeInfo;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class _01_BinaryTree<E> {
+public class _01_BinaryTree<E> implements BinaryTreeInfo {
     protected int size; // 元素数量
     protected Node<E> root; // 根节点
 
@@ -243,5 +245,27 @@ public class _01_BinaryTree<E> {
 
     protected Node<E> createNode(E element, Node<E> parent){
         return new Node<>(element, parent); // 默认返回一个通用节点
+    }
+
+
+
+    @Override
+    public Object root() {
+        return root;
+    }
+
+    @Override
+    public Object left(Object node) {
+        return ((Node<E>)node).left;
+    }
+
+    @Override
+    public Object right(Object node) {
+        return  ((Node<E>)node).right;
+    }
+
+    @Override
+    public Object string(Object node) {
+        return ((Node<E>)node).element;
     }
 }

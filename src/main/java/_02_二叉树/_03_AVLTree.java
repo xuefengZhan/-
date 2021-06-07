@@ -1,8 +1,12 @@
 package _02_二叉树;
 
+import BinaryTreePrinter.src.com.mj.printer.BinaryTreeInfo;
+import BinaryTreePrinter.src.com.mj.printer.BinaryTrees;
+
 import java.util.Comparator;
 
-public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
+public class _03_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
+
     public _03_AVLTree(){}
 
     public _03_AVLTree(Comparator comparator){
@@ -33,6 +37,7 @@ public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
             height = Math.max(leftHeight,rightHeight) + 1;
         }
 
+
         //返回较高的子节点，如果一样高，返回同方向的子节点
         public Node<E> tallerChild(){
             int leftHeight = left==null? 0 : ((AVLNode<E>)left).height;
@@ -49,6 +54,14 @@ public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
         }
     }
 
+
+    @Override
+    protected void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
+        super.afterRotate(grand, parent, child);
+        updateHeight(grand);
+        updateHeight(parent);
+    }
+
     private boolean isBalanced(Node<E> node){
         return Math.abs(((AVLNode<E>)node).balanceFacotr()) <= 1;
     }
@@ -61,97 +74,6 @@ public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
     protected Node<E> createNode(E element, Node<E> parent) {
         return new AVLNode<E>(element,parent);
     }
-
-    //旋转
-    private void rotateLeft(Node<E> node) {
-        Node<E> p = node.right;
-        Node<E> tmp = p.left;
-
-        //1.更改左右子节点
-        p.left = node;
-        node.right = tmp;
-        if (node.parent == null) {
-            root = node;
-        } else if (node == node.parent.left) {
-            node.parent.left = p;
-        } else {
-            node.parent.right = p;
-        }
-
-        p.parent = node.parent;
-        node.parent = p;
-        if (tmp != null) {
-            tmp.parent = node;
-        }
-
-        //更新高度
-        updateHeight(node);
-        updateHeight(p);
-    }
-
-
-        private void rotateRight(Node<E> node){
-            Node<E> p = node.left;
-            Node<E> n = p.left;
-            Node<E> tmp = p.right;
-
-            p.right = node;
-            node.left = tmp;
-            if (node.parent == null) {
-                root = node;
-            } else if (node == node.parent.left) {
-                node.parent.left = p;
-            } else {
-                node.parent.right = p;
-            }
-
-            p.parent = node.parent;
-            node.parent = p;
-            if (tmp != null) {
-                tmp.parent = node;
-            }
-            //更新高度
-            updateHeight(node);
-            updateHeight(p);
-        }
-
-        //统一旋转操作
-    private void rotate(
-            Node<E> r, // 子树的根节点
-            Node<E> b, Node<E> c,
-            Node<E> d,
-            Node<E> e, Node<E> f) {
-        // 让d成为这颗子树的根结点
-        d.parent = r.parent;
-        if (r.isLeftChild()) {
-            r.parent.left = d;
-        } else if (r.isRightChild()) {
-            r.parent.right = d;
-        } else {
-            root = d;
-        }
-        // b-c
-        b.right = c;
-        if (c != null) {
-            c.parent = b;
-        }
-        updateHeight(b);
-
-        // e-f
-        f.left = e;
-        if (e != null) {
-            e.parent = f;
-        }
-        updateHeight(f);
-
-        // b-d-f
-        d.left = b;
-        d.right = f;
-        b.parent = d;
-        f.parent = d;
-        updateHeight(d);
-    }
-
 
 
     //给Node恢复平衡  node是高度最低的失衡节点g
@@ -199,11 +121,19 @@ public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
        }
     }
 
+    @Override
+    protected void rotate(Node<E> r, Node<E> b, Node<E> c, Node<E> d, Node<E> e, Node<E> f) {
+        super.rotate(r, b, c, d, e, f);
+        updateHeight(b);
+        updateHeight(f);
+        updateHeight(d);
+    }
+
     //todo 删除节点可能会引发多个祖父节点失衡，因此对比 afterAdd()
     // afterAdd只需要修复最低的失衡节点即可，因此只需要去掉break即可。
     // 需要注意的是：在删除节点的过程中，我们并没有修改del节点的parent，
     // 因此node=node.parent是一直有效的。
-    protected void afterRemove(Node<E> node) {
+    protected void afterRemove(Node<E> node,Node<E> replacement) {
         //沿着parent一直往上找到第一个失衡的父节点
         while((node=node.parent)!= null){
             //新节点的父节点肯定是平衡的，因此从这往上一直更新到
@@ -215,5 +145,30 @@ public class _03_AVLTree<E> extends _02_BinarySearchTree<E>{
                 rebalance(node);
             }
         }
+    }
+}
+
+class AVLT{
+    public static void main(String[] args) {
+        _03_AVLTree<Integer> avlt = new _03_AVLTree<>();
+        //avlt.add()
+        avlt.add(35);
+        avlt.add(37);
+        avlt.add(34);
+        avlt.add(56);
+        avlt.add(25);
+        avlt.add(62);
+        avlt.add(57);
+        avlt.add(9);
+        avlt.add(74);
+        avlt.add(32);
+        avlt.add(94);
+        avlt.add(80);
+        avlt.add(75);
+        avlt.add(100);
+        avlt.add(16);
+        avlt.add(82);
+        BinaryTrees.println(avlt);
+
     }
 }

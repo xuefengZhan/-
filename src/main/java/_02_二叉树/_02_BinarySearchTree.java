@@ -1,13 +1,12 @@
 package _02_二叉树;
 
-import org.junit.Before;
-import org.junit.Test;
+import BinaryTreePrinter.src.com.mj.printer.BinaryTreeInfo;
+import BinaryTreePrinter.src.com.mj.printer.BinaryTrees;
 
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Queue;
 
-public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
+
+public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
     private Comparator<E> comparator;
 
     public _02_BinarySearchTree(){}
@@ -31,15 +30,8 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
     }
 
     //todo 提供一个add后的操作，普通BST中不做任何实现
-    //这个node是插入的新节点
-    protected void afterAdd(Node<E> node){
-
-    }
-
-    protected void afterRemove(Node<E> node){
-
-    }
-
+    protected void afterAdd(Node<E> node){}
+    protected void afterRemove(Node<E> node,Node<E> replacement){}
     protected Node<E> createNode(E element,Node<E> parent){
         return new Node(element,parent);
     }
@@ -112,13 +104,12 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
             del = node;
         }
 
-
         Node<E> child = del.left == null ? del.right:del.left;
-
 
         if(child != null){  //del是度为1 的节点  需要做这一步
             child.parent = del.parent;
         }
+
         if(del.parent == null){
             root = child;
         }else{
@@ -128,9 +119,8 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
                 del.parent.right = child;
             }
         }
-
         //节点真正被删除的时候删除
-        afterRemove(del);
+        afterRemove(del,child);
         size--;
     }
 
@@ -142,6 +132,32 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E>{
         return node(element) == null;
     }
 
+
+}
+
+class BST{
+    public static void main(String[] args) {
+        _02_BinarySearchTree<Integer> bst = new _02_BinarySearchTree();
+        bst.add(8);
+        bst.add(4);
+        bst.add(2);
+        bst.add(1);
+        bst.add(3);
+        bst.add(6);
+        bst.add(5);
+        bst.add(7);
+        bst.add(13);
+        bst.add(10);
+        bst.add(9);
+        bst.add(12);
+        bst.add(11);
+
+        bst.remove(1);
+        BinaryTrees.println(bst);
+
+        // PrintStyle.INORDER（中序打印）
+        //BinaryTrees.println(bst, BinaryTrees.PrintStyle.INORDER);
+    }
 }
 
 
