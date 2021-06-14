@@ -104,6 +104,8 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
             del = node;
         }
 
+        //del要么度为1，要那么度为0
+        //child为del不为空的子节点。如果child为null，则del为叶子结点。
         Node<E> child = del.left == null ? del.right:del.left;
 
         if(child != null){  //del是度为1 的节点  需要做这一步

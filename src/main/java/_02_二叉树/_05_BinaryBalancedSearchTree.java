@@ -13,7 +13,7 @@ public class _05_BinaryBalancedSearchTree<E> extends _02_BinarySearchTree<E>{
     //旋转
     protected void rotateLeft(Node<E> node) {
         Node<E> parent = node.right;
-        Node<E> child = parent.left;
+        Node<E> child =  parent.left;
 
         //1.更改左右子节点
         parent.left = node;
