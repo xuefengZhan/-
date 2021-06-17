@@ -32,8 +32,10 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
     //todo 提供一个add后的操作，普通BST中不做任何实现
     protected void afterAdd(Node<E> node){}
     protected void afterRemove(Node<E> node,Node<E> replacement){}
+
+    //对于二叉搜索树来说，AVL树和RBTree的节点类型都不同，因此为了兼容，createNode方法，用于给子类各种树实现，创建属于自己的Node
     protected Node<E> createNode(E element,Node<E> parent){
-        return new Node(element,parent);
+        return new Node<E>(element,parent);
     }
 
     public void add(E element){

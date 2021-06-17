@@ -45,7 +45,7 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
          */
 
         //返回兄弟节点
-        public Node<E> sibling() { // 红黑树中用到, 返回兄弟节点
+        public Node<E> brother() { // 红黑树中用到, 返回兄弟节点
             if (isLeftChild()) {
                 return parent.right;
             }
