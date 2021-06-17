@@ -49,6 +49,10 @@ public class _05_BinaryBalancedSearchTree<E> extends _02_BinarySearchTree<E>{
         }else{
             root = parent;
         }
+        grand.parent = parent;
+        if(child != null){
+            child.parent = grand;
+        }
     }
     //统一旋转操作
     protected void rotate(
