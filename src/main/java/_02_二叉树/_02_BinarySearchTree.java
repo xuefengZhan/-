@@ -74,7 +74,7 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
 
 
     //根据值找到节点
-    private Node<E> node(E element){
+    protected Node<E> node(E element){
         elementNotNullCheck(element);
         Node<E> node = root;
         while(node!= null){
@@ -111,7 +111,6 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
         if(child != null){  //del是度为1 的节点  需要做这一步
             child.parent = del.parent;
         }
-
         if(del.parent == null){
             root = child;
         }else{
@@ -126,6 +125,8 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
         size--;
     }
 
+
+
     public void remove(E element){
         remove(node(element));
     }
@@ -137,29 +138,6 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
 
 }
 
-class BST{
-    public static void main(String[] args) {
-        _02_BinarySearchTree<Integer> bst = new _02_BinarySearchTree();
-        bst.add(8);
-        bst.add(4);
-        bst.add(2);
-        bst.add(1);
-        bst.add(3);
-        bst.add(6);
-        bst.add(5);
-        bst.add(7);
-        bst.add(13);
-        bst.add(10);
-        bst.add(9);
-        bst.add(12);
-        bst.add(11);
 
-        bst.remove(1);
-        BinaryTrees.println(bst);
-
-        // PrintStyle.INORDER（中序打印）
-        //BinaryTrees.println(bst, BinaryTrees.PrintStyle.INORDER);
-    }
-}
 
 

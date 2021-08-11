@@ -99,7 +99,6 @@ public class ArrayList<E> extends AbstractList<E> {
     }
 
 
-
     public String toString(){
         StringBuilder sb = new StringBuilder();
 

@@ -55,6 +55,11 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
             }
             return null;
         }
+
+        @Override
+        public String toString() {
+            return element.toString();
+        }
     }
 
     public int size() {
@@ -71,45 +76,56 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
         size = 0;
     }
 
+
     //定义访问元素的接口，具体操作
-    public static interface Visitor<E>{
-        void visit(E element);
+    public static abstract class Visitor<E>{
+        boolean stop;
+        abstract boolean visit(E element);
     }
 
     private void preorderTraversal(Node<E> node,Visitor<E> visitor){
-        if(node == null) return;
+        if(node == null || visitor.stop) return;   //todo 这个visitor.stop是遏止当前节点的后续访问了
         //System.out.println(node.element);
-        visitor.visit(node.element);
+        if(visitor.stop) return;   //todo 这个是彻底遏制当前节点的打印
+        visitor.stop = visitor.visit(node.element);
         preorderTraversal(node.left,visitor);
         preorderTraversal(node.right,visitor);
     }
 
     public void preorderTraversal(Visitor<E> visitor){
+
+        if(visitor == null) return;
         preorderTraversal(root,visitor);
     }
+
+
     //中序遍历
     //todo 二叉搜索树的中序遍历结果要么是升序要么是降序
     private void inorderTraversal(Node<E> node,Visitor<E> visitor){
-        if(node == null) return;
+        if(node == null || visitor.stop) return;
         inorderTraversal(node.left,visitor);
         //System.out.println(node.element);
-        visitor.visit(node.element);
+        if(visitor.stop) return; //todo 虽然这里return了，但是上面一行代码还再递归调用中！ 所以一开始也要加一个visitor.stop判断
+        visitor.stop = visitor.visit(node.element);
         inorderTraversal(node.right,visitor);
     }
     public void inorderTraversal(Visitor<E> visitor){
+        if(visitor == null) return;
         inorderTraversal(root,visitor);
     }
 
     //后序遍历
     private void postorderTraversal(Node<E> node,Visitor<E> visitor){
-        if(node == null || visitor == null) return;
+        if(node == null || visitor.stop) return;
         postorderTraversal(node.left,visitor);
         postorderTraversal(node.right,visitor);
         //System.out.println(node.element);
-        visitor.visit(node.element);
+        if(visitor.stop) return;
+        visitor.stop = visitor.visit(node.element);
     }
 
     public void postorderTraversal(Visitor<E> visitor){
+        if(visitor == null) return;
         postorderTraversal(root,visitor);
     }
 
@@ -121,7 +137,7 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
         while(!que.isEmpty()){
             Node<E> poll = que.poll();
             //System.out.println(poll.element);
-            visitor.visit(poll.element);
+            if(visitor.visit(poll.element)) return; //返回true表示该终止了
 
             if(poll.left != null){
                 que.offer(poll.left);
@@ -209,7 +225,7 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
 
     //获取node得前驱节点
     protected Node<E> predesessor(Node<E> node){
-        if(node == null) return null;
+        if(node == null) return  null;
         Node<E> prev;
         //todo case1. 左子树不为null
         if(node.left != null){
@@ -217,15 +233,17 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
             while(prev.right != null){
                 prev = prev.right;
             }
-            return prev;
+            //prev.right == null prev就是前继节点
+        }else{
+            //todo case2.左子树为null，父节点不为null
+            prev = node.parent;
+            while(prev != null && node != prev.right){
+                node = prev;
+                prev = prev.parent;
+            }
+            //prev == null || node == prev.right
         }
-        //todo case2.左子树为null，父节点不为null
-        while(node.parent != null && node != node.parent.right){
-            node = node.parent;
-        }
-        //要么node.parent == null 要么 node== node.parent.right
-        return node.parent;
-
+        return prev;
     }
 
     protected Node<E> sucessor(Node<E> node){
@@ -242,6 +260,7 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
         }
         return node.parent;
     }
+
 
     protected Node<E> createNode(E element, Node<E> parent){
         return new Node<>(element, parent); // 默认返回一个通用节点
