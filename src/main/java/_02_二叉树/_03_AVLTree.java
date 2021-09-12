@@ -56,6 +56,7 @@ public class _03_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
 
 
     @Override
+    //只有AVL树需要更新高度，因此这里需要重写此方法
     protected void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
         super.afterRotate(grand, parent, child);
         updateHeight(grand);
@@ -83,6 +84,7 @@ public class _03_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
         //n是p左右子树中高度最高的节点
         Node<E> parent = ((AVLNode<E>)node).tallerChild();
         Node<E> n =  ((AVLNode<E>)parent).tallerChild();
+
         if(parent.isLeftChild()){
             if(n.isLeftChild()){
                 //LL
@@ -147,28 +149,32 @@ public class _03_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
         }
     }
 }
-
-class AVLT{
-    public static void main(String[] args) {
-        _03_AVLTree<Integer> avlt = new _03_AVLTree<>();
-        //avlt.add()
-        avlt.add(35);
-        avlt.add(37);
-        avlt.add(34);
-        avlt.add(56);
-        avlt.add(25);
-        avlt.add(62);
-        avlt.add(57);
-        avlt.add(9);
-        avlt.add(74);
-        avlt.add(32);
-        avlt.add(94);
-        avlt.add(80);
-        avlt.add(75);
-        avlt.add(100);
-        avlt.add(16);
-        avlt.add(82);
-        BinaryTrees.println(avlt);
-
-    }
-}
+//
+//class AVLT{
+//    public static void main(String[] args) {
+//        _03_AVLTree<Integer> avlt = new _03_AVLTree<>();
+//
+//        avlt.add(35);
+//        avlt.add(37);
+//        avlt.add(34);
+//        avlt.add(56);
+//        avlt.add(25);
+//        avlt.add(62);
+//        avlt.add(57);
+//        avlt.add(9);
+//        avlt.add(74);
+//        avlt.add(32);
+//        avlt.add(94);
+//        avlt.add(80);
+//        avlt.add(75);
+//        avlt.add(100);
+//        avlt.add(16);
+//        avlt.add(82);
+////        Integer[] data = new Integer[]{85,19,69,3,7,99,95,2,1,70,44,58,11,21,14,93,57,4,56};
+////        for (Integer datum : data) {
+////            avlt.add(datum);
+////        }
+//        BinaryTrees.println(avlt);
+//
+//    }
+//}

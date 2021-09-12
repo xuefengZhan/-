@@ -285,6 +285,6 @@ public class _01_BinaryTree<E> implements BinaryTreeInfo {
 
     @Override
     public Object string(Object node) {
-        return ((Node<E>)node).element;
+        return node;
     }
 }

@@ -95,7 +95,6 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
     private void remove(Node<E> node){
         if(node == null) return;
         //先处理度为2的节点，因为也是删除度为1的节点
-        // 找到要被删除的节点
         Node<E> del = null;
         if(node.left != null && node.right != null){
             del = predesessor(node);//前继节点
@@ -103,7 +102,6 @@ public class _02_BinarySearchTree<E> extends _01_BinaryTree<E> {
         }else{
             del = node;
         }
-
         //del要么度为1，要那么度为0
         //child为del不为空的子节点。如果child为null，则del为叶子结点。
         Node<E> child = del.left == null ? del.right:del.left;
