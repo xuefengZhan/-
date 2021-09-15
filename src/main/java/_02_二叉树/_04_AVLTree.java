@@ -5,11 +5,11 @@ import BinaryTreePrinter.src.com.mj.printer.BinaryTrees;
 
 import java.util.Comparator;
 
-public class _04_AVLTree<E> extends _03_BinaryBalancedSearchTree<E>{
+public class _03_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
 
-    public _04_AVLTree(){}
+    public _03_AVLTree(){}
 
-    public _04_AVLTree(Comparator comparator){
+    public _03_AVLTree(Comparator comparator){
         super(comparator);
     }
 
@@ -56,6 +56,7 @@ public class _04_AVLTree<E> extends _03_BinaryBalancedSearchTree<E>{
 
 
     @Override
+    //只有AVL树需要更新高度，因此这里需要重写此方法
     protected void afterRotate(Node<E> grand, Node<E> parent, Node<E> child) {
         super.afterRotate(grand, parent, child);
         updateHeight(grand);
@@ -79,10 +80,11 @@ public class _04_AVLTree<E> extends _03_BinaryBalancedSearchTree<E>{
     //给Node恢复平衡  node是高度最低的失衡节点g
     private void rebalance(Node<E> node){
         //必须得获取n\p\g的关系，才能知道是四种失衡情况的哪一种
-        //parent是g左右子树中高度最高的节点
+        //p是g左右子树中高度最高的节点
         //n是p左右子树中高度最高的节点
         Node<E> parent = ((AVLNode<E>)node).tallerChild();
         Node<E> n =  ((AVLNode<E>)parent).tallerChild();
+
         if(parent.isLeftChild()){
             if(n.isLeftChild()){
                 //LL
@@ -147,11 +149,11 @@ public class _04_AVLTree<E> extends _03_BinaryBalancedSearchTree<E>{
         }
     }
 }
-
-class AVLT{
-    public static void main(String[] args) {
-        _04_AVLTree<Integer> avlt = new _04_AVLTree<>();
-
+//
+//class AVLT{
+//    public static void main(String[] args) {
+//        _03_AVLTree<Integer> avlt = new _03_AVLTree<>();
+//
 //        avlt.add(35);
 //        avlt.add(37);
 //        avlt.add(34);
@@ -168,23 +170,11 @@ class AVLT{
 //        avlt.add(100);
 //        avlt.add(16);
 //        avlt.add(82);
-
-        avlt.add(55);
-        avlt.add(87);
-        avlt.add(56);
-        avlt.add(74);
-        avlt.add(96);
-        avlt.add(22);
-        avlt.add(62);
-        avlt.add(20);
-        avlt.add(79);
-        avlt.add(68);
-        avlt.add(90);
-        avlt.add(50);
-        avlt.add(50);
-        avlt.add(60);
-        avlt.add(70);
-        BinaryTrees.println(avlt);
-
-    }
-}
+////        Integer[] data = new Integer[]{85,19,69,3,7,99,95,2,1,70,44,58,11,21,14,93,57,4,56};
+////        for (Integer datum : data) {
+////            avlt.add(datum);
+////        }
+//        BinaryTrees.println(avlt);
+//
+//    }
+//}
