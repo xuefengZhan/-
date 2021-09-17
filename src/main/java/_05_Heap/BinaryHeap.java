@@ -18,6 +18,37 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
         this(null);
     }
 
+
+    //批量建堆
+
+    private void heapify() {
+        // 自上而下的上滤
+//		for (int i = 1; i < size; i++) {
+//			siftUp(i);
+//		}
+
+        // 自下而上的下滤
+        for (int i = (size >> 1) - 1; i >= 0; i--) {
+            siftDown(i);
+        }
+    }
+
+    public BinaryHeap(E[] array,Comparator<E> comparator){
+        super(comparator);
+
+        if (elements == null || elements.length == 0) {
+            this.elements = (E[]) new Object[DEFAULT_CAPACITY];
+        } else {
+            size = elements.length;
+            int capacity = Math.max(elements.length, DEFAULT_CAPACITY);
+            this.elements = (E[]) new Object[capacity];
+            for (int i = 0; i < elements.length; i++) {
+                this.elements[i] = elements[i];
+            }
+            heapify();
+        }
+    }
+
     @Override
     public void clear() {
         for (int i = 0; i < size; i++) {
@@ -37,13 +68,10 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             elements = (E[]) new Object[DEFAULT_CAPACITY];
         }
         if (size == elements.length) {
-            int oldCapacity = size;
-            int newCapacity = oldCapacity + (oldCapacity >> 1);
+            int newCapacity = size + (size >> 1);
             E[] newElements = (E[]) new Object[newCapacity];
 
-            for (int i = 0; i < size; i++) {
-                newElements[i] = elements[i];
-            }
+            System.arraycopy(elements, 0, newElements, 0, size);
             elements = newElements;
         }
     }
@@ -68,7 +96,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             if (compare(element, parent) <= 0) break;
 
             // 将父元素存储在index位置
-            elements[index] = parent;
+            elements[index] = elements[parentIndex];
 
             // 重新赋值index
             index = parentIndex;
@@ -90,8 +118,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
     }
 
     public void siftDown(int index) {
-        E old = elements[0];
-        int goalIndex = index;
+        E old = elements[index];
         while (index <= (size - 2) >> 1) {
             int leftIndex = (index << 1) + 1;
             int rightIndex = leftIndex + 1;
@@ -100,15 +127,14 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
             if (index <= (size - 3) >> 1) {//左右都有
                 maxIndex = compare(elements[leftIndex], elements[rightIndex]) > 0 ? leftIndex : rightIndex;
             }
-            if (compare(elements[maxIndex], elements[index]) > 0) {
+            if (compare(elements[maxIndex], old) > 0) {
                 elements[index] = elements[maxIndex];
                 index = maxIndex;
-                goalIndex = index;
             } else {
                 break;
             }
         }
-        elements[goalIndex] = old;
+        elements[index] = old;
     }
 
     @Override
@@ -165,7 +191,7 @@ public class BinaryHeap<E> extends AbstractHeap<E> implements BinaryTreeInfo {
     }
 }
 
-
+//
 class Test {
     public static void main(String[] args) {
         BinaryHeap<Integer> heap = new BinaryHeap<>();
@@ -178,10 +204,27 @@ class Test {
         heap.add(90);
         heap.add(65);
         BinaryTrees.println(heap);
-//        heap.remove();
+        heap.remove();
+        BinaryTrees.println(heap);
+        heap.remove();
+        BinaryTrees.println(heap);
+        heap.remove();
+        BinaryTrees.println(heap);
+        heap.remove();
+        BinaryTrees.println(heap);
+        heap.remove();
+        BinaryTrees.println(heap);
+        heap.remove();
+        BinaryTrees.println(heap);
+//
+//        System.out.println(heap.replace(70));
 //        BinaryTrees.println(heap);
 
-        System.out.println(heap.replace(70));
-        BinaryTrees.println(heap);
+
+        //批量建堆测试
+//        Integer[] array =  {88, 44, 53, 41, 16, 6, 70, 18, 85, 98, 81, 23, 36, 43, 37};
+//        BinaryHeap<Integer> heap2 = new BinaryHeap<Integer>(array, null);
+//        BinaryTrees.println(heap2);
+
     }
 }

@@ -5,11 +5,11 @@ import BinaryTreePrinter.src.com.mj.printer.BinaryTrees;
 
 import java.util.Comparator;
 
-public class _03_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
+public class _04_AVLTree<E> extends _05_BinaryBalancedSearchTree<E>{
 
-    public _03_AVLTree(){}
+    public _04_AVLTree(){}
 
-    public _03_AVLTree(Comparator comparator){
+    public _04_AVLTree(Comparator comparator){
         super(comparator);
     }
 

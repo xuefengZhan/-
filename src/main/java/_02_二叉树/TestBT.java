@@ -26,7 +26,7 @@ public class TestBT{
     @Test
     public void test01(){
         Integer[] data = new Integer[] {7, 4, 2, 1, 3, 5,12};
-        _02_BinarySearchTree bst = new _02_BinarySearchTree<>();
+        _02_BinarySearchTree<Integer> bst = new _02_BinarySearchTree<>();
 
         for (Integer datum : data) {
             bst.add(datum);
@@ -40,6 +40,14 @@ public class TestBT{
                 return element == 3;
             }
         });
+
+        bst.preorder(new _01_BinaryTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.println(element);
+                return element == 3;
+            }
+        });
     }
     /*
         测试中序遍历
@@ -47,7 +55,7 @@ public class TestBT{
     @Test
     public void test02(){
         Integer[] data = new Integer[] {7, 4, 2, 1, 3, 5,12};
-        _02_BinarySearchTree bst = new _02_BinarySearchTree<Integer>();
+        _02_BinarySearchTree<Integer> bst = new _02_BinarySearchTree<Integer>();
         for (Integer datum : data) {
             bst.add(datum);
         }
@@ -60,6 +68,16 @@ public class TestBT{
                 return element == 7;
             }
         });
+
+        bst.inorder(new _01_BinaryTree.Visitor<Integer>() {
+            @Override
+            boolean visit(Integer element) {
+                System.out.println(element);
+                return element == 3;
+            }
+        });
+
+
     }
     /*
         测试后续遍历
@@ -67,7 +85,7 @@ public class TestBT{
     @Test
     public void test03(){
         Integer[] data = new Integer[] {7, 4, 2, 1, 3, 5,12};
-        _02_BinarySearchTree bst = new _02_BinarySearchTree<Integer>();
+        _02_BinarySearchTree<Integer> bst = new _02_BinarySearchTree<Integer>();
         for (Integer datum : data) {
             bst.add(datum);
         }
@@ -78,6 +96,15 @@ public class TestBT{
             boolean visit(Integer element) {
                 System.out.println(element);
                 return element == 7;
+            }
+        });
+
+        bst.postorder(new _01_BinaryTree.Visitor<Integer>(){
+
+            @Override
+            boolean visit(Integer element) {
+                System.out.println(element);
+                return element == 3;
             }
         });
     }
